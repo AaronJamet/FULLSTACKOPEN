@@ -31,14 +31,16 @@ const requestLogger = (request, response, next) => {
   next() // cede el control al siguiente Middleware
 }
 
+app.use(express.json())
+app.use(requestLogger)
+
 // Permite Intercambio de Recursos de Origen Cruzado (CORS) 
 // - asi codigo JavaScript puede comunicarse con servidores en 
 // 2 origenes: 3008 (backend Node) y 3000 (React Dev Server).
 const cors = require('cors')
 app.use(cors())
 
-app.use(express.json())
-app.use(requestLogger)
+app.use(express.static('dist'))
 
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint'})
