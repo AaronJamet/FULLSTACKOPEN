@@ -1,0 +1,10 @@
+sequenceDiagram
+    participant browser
+    participant server
+
+    browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+    activate server
+    browser->>server: Note written by the user
+    deactivate server
+
+    Note right of browser: The browser sends the new note by the user as JSON using HTTP Post request to the server
