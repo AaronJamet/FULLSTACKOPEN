@@ -33,7 +33,7 @@ const requestLogger = (request, response, next) => {
 
 // Permite Intercambio de Recursos de Origen Cruzado (CORS) 
 // - asi codigo JavaScript puede comunicarse con servidores en 
-// 2 origenes: 3008 (backend Node) y 3000 (React Dev Server)
+// 2 origenes: 3008 (backend Node) y 3000 (React Dev Server).
 const cors = require('cors')
 app.use(cors())
 
