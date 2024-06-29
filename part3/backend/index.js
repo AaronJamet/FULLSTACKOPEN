@@ -22,12 +22,6 @@ let notes = [
 
 app.use(express.static('dist'))
 
-// Permite Intercambio de Recursos de Origen Cruzado (CORS) 
-// - asi codigo JavaScript puede comunicarse con servidores en 
-// 2 origenes: 3008 (backend Node) y 3000 (React Dev Server).
-const cors = require('cors')
-app.use(cors())
-
 // Ejemplo de MIDDLEWARE: funciones que pueden usarse para 
 // manejar objetos de REQUEST y RESPONSE
 // Esta función imprime info sobre cada solicitud que se envía al servidor
@@ -38,6 +32,12 @@ const requestLogger = (request, response, next) => {
   console.log('---');
   next() // cede el control al siguiente Middleware
 }
+
+// Permite Intercambio de Recursos de Origen Cruzado (CORS) 
+// - asi codigo JavaScript puede comunicarse con servidores en 
+// 2 origenes: 3008 (backend Node) y 3000 (React Dev Server).
+const cors = require('cors')
+app.use(cors())
 
 app.use(express.json())
 app.use(requestLogger)
