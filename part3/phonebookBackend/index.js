@@ -3,6 +3,12 @@ const morgan = require('morgan')
 
 const app = express()
 
+// Permite Intercambio de Recursos de Origen Cruzado (CORS) 
+// - asi codigo JavaScript puede comunicarse con servidores en 
+// 2 origenes: 3008 (backend Node) y 3000 (React Dev Server).
+const cors = require('cors')
+app.use(cors())
+
 app.use(express.json())
 
 morgan.token('body', req => {
