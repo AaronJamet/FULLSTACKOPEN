@@ -100,13 +100,13 @@ const App = () => {
   }
 
   const handleNameFilter = (event) => {
-    setNameFilter(event.target.value)
+    setNameFilter(event.target.value.toLowerCase())
   }
 
   const personsToShow = 
     nameFilter === '' 
       ? persons 
-      : persons.filter(p => p.name.toLowerCase().includes(nameFilter.toLowerCase()))
+      : persons.filter(p => p.name.toLowerCase().includes(nameFilter))
 
   return (
     <div>
