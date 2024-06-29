@@ -3,6 +3,9 @@ const morgan = require('morgan')
 
 const app = express()
 
+// takes static files for deploying front from dist folder
+app.use(express.static('dist'))
+
 // Permite Intercambio de Recursos de Origen Cruzado (CORS) 
 // - asi codigo JavaScript puede comunicarse con servidores en 
 // 2 origenes: 3008 (backend Node) y 3000 (React Dev Server).
