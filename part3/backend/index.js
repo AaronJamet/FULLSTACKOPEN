@@ -1,8 +1,14 @@
 // EJEMPLO DE UN SERVIDOR WEB EN NODE.JS
+
+// importar dotenv antes que el modelo Note, para que .env este disponible globalmente antes de importar otros modulos
+require('dotenv').config() // cargar archivo configuracion con variables de entorno
 const express = require('express')
 const app = express()
 
-let notes = [
+const mongoose = require('mongoose')
+const Note = require('./models/note')
+
+/* let notes = [
   {
     id: 1,
     content: 'HTML is easy',
@@ -18,7 +24,7 @@ let notes = [
     content: 'GET and POST are the most important methods of HTTP protocol',
     important: true
   }
-]
+] */
 
 app.use(express.static('dist'))
 
@@ -42,6 +48,7 @@ app.use(cors())
 app.use(express.json())
 app.use(requestLogger)
 
+// ENDPOINTS and server actions
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint'})
 }
@@ -51,19 +58,19 @@ app.get('/', (request, response) => {
 })
 
 app.get('/api/notes', (request, response) => {
-  response.send(notes)
+  // obtains all notes from the Atlas mongoDB
+  Note.find({})
+      .then(notes => {
+        response.json(notes)
+      })
 })
 
 // GET individual resources or Notes
 app.get('/api/notes/:id', (request, response) => {
-  const id = Number(request.params.id)
-  const note = notes.find(note => note.id === id)
-
-  if (note) {
-    response.json(note)
-  } else {
-    response.status(404).send('The ID hasnt been found on the server')
-  }
+  Note.findById(request.params.id)
+      .then(note => {
+        response.json(note)
+      })
 })
 
 // ELIMINAR recursos
@@ -75,37 +82,30 @@ app.delete('/api/notes/:id', (request, response) => {
 })
 
 // POST, recibiendo datos en el servidor
-const generateId = () => {
-  const maxId = notes.length > 0
-    ? Math.max(...notes.map(n => n.id))
-    : 0
-
-    return maxId + 1
-}
-
 app.post('/api/notes', (request, response) => {
   const body = request.body
 
-  if (!body.content) {
+  if (body.content === undefined) {
     return response.status(400).json({
       error: 'content missing'
     })
   }
 
-  const note = {
+  // note objects are created with the constructor function of the Note mongoose Model
+  const note = new Note({
     content: body.content,
-    important: Boolean(body.important) || false,
-    id: generateId()
-  }
+    important: body.important || false,
+  })
 
-  notes = notes.concat(note)
-
-  response.json(note)
+  // save new note in mongoDB
+  note.save().then(savedNote => {
+    response.json(savedNote)
+  })
 })
 
 app.use(unknownEndpoint)
 
-const PORT = process.env.PORT || 3008
+const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })

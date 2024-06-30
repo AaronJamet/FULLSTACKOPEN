@@ -1,7 +1,11 @@
 const express = require('express')
 const morgan = require('morgan')
 
+require('dotenv').config() // cargar archivo configuracion con variables de entorno
 const app = express()
+
+const mongoose = require('mongoose')
+const Person = require('./models/person')
 
 // takes static files for deploying front from dist folder
 app.use(express.static('dist'))
@@ -19,51 +23,36 @@ morgan.token('body', req => {
 })
 app.use(morgan(':method :url :status :response-time :body'))
 
-let persons = [
-  {
-    id: 1,
-    name: 'Arto Hellas',
-    number: '040-123456'
-  },
-  {
-    id: 2,
-    name: 'Ada Lovelace',
-    number: '39-44-5323523'
-  },
-  {
-    id: 3,
-    name: 'Dan Abramov',
-    number: '12-43-234345'
-  },
-  {
-    id: 4,
-    name: 'Mary Poppendieck',
-    number: '39-23-6423122'
-  }
-]
-
+// get complete list of persons stored in mongoDB
 app.get('/api/persons', (request, response) => {
-  response.json(persons)
+  Person
+    .find({})
+    .then(persons => {
+      response.json(persons)
+    })
 })
 
 app.get('/info', (request, response) => {
   const date = new Date()
 
-  response.send(
-    `<p>Phonebook has info for ${persons.length}</p>
-    <p>${date}</p>`
-  )
+  Person
+    .find({})
+    .then(persons => {
+      response.send(
+        `<p>Phonebook has info for ${persons.length} persons</p>
+        <p>${date}</p>`
+      )
+    })
 })
 
 app.get('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  const person = persons.find(person => person.id === id)
+  const id = request.params.id
 
-  if (person) {
-    response.json(person)
-  } else {
-    response.status(404).end()
-  }
+  Person
+    .findById(id)
+    .then(person => {
+      response.json(person)
+    })
 })
 
 app.delete('/api/persons/:id', (request, response) => {
@@ -89,24 +78,23 @@ app.post('/api/persons', (request, response) => {
     })
   }
 
-  const nameRepeated = persons.find(p => p.name === body.name)
+  /* const nameRepeated = persons.find(p => p.name === body.name)
   if (nameRepeated !== undefined) {
     return response.status(400).json({
       error: 'name must be unique'
     })
-  }
+  } */
 
-  const person = {
-    id: generateRandomId(),
+  const person = new Person({
     name: body.name,
     number: body.number
-  }
+  })
 
-  persons = persons.concat(person)
-
-  response.json(person)
+  person.save().then(savedPerson => {
+    response.json(savedPerson)
+  })
 })
 
-const PORT = process.env.PORT || 3008
+const PORT = process.env.PORT
 app.listen(PORT)
 console.log(`Server is running in port ${PORT}`);

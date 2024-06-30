@@ -47,7 +47,7 @@ if (process.argv.length === 5) {
   })
 }
 
-// ADD all persons stored in our mongoDB
+// GET all persons stored in our mongoDB
 if (process.argv.length === 3) {
   Person
     .find({})
