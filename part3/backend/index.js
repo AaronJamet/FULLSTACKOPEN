@@ -57,28 +57,57 @@ app.get('/', (request, response) => {
   response.send('<h1>Hello World!</h1>')
 })
 
-app.get('/api/notes', (request, response) => {
+app.get('/api/notes', (request, response, next) => {
   // obtains all notes from the Atlas mongoDB
   Note.find({})
       .then(notes => {
         response.json(notes)
       })
+      .catch(error => next(error))
 })
 
 // GET individual resources or Notes
-app.get('/api/notes/:id', (request, response) => {
+app.get('/api/notes/:id', (request, response, next) => {
   Note.findById(request.params.id)
       .then(note => {
-        response.json(note)
+        if (note) {
+          response.json(note)
+        } else {
+          response.status(404).end()
+        } 
+      })
+      .catch(error => {
+        // pasar error hacia adelante con next(), como el throw en Java
+        // la ejecucion continuara en el middleware de Control de errores
+        next(error)
       })
 })
 
 // ELIMINAR recursos
-app.delete('/api/notes/:id', (request, response) => {
-  const id = Number(request.params.id)
-  notes = notes.filter(note => note.id !== id)
+app.delete('/api/notes/:id', (request, response, next) => {
+  Note.findByIdAndDelete(request.params.id)
+    .then(result => {
+      response.status(204).end()
+    })
+    .catch(error => next(error))
+})
 
-  response.status(204).end()
+// PUT, update Note in mongoDB
+app.put('/api/notes/:id', (request, response, next) => {
+  const body = request.body
+
+  // findBYIdAndUpdate receives a normal JS object, not a new Note with constructor function
+  const note = {
+    content: body.content,
+    important: body.important,
+  }
+
+  // 'new: true' returns the object AFTER the update has been applied
+  Note.findByIdAndUpdate(request.params.id, note, { new: true })
+    .then(updatedNote => {
+      response.json(updatedNote)
+    })
+    .catch(error => next(error))
 })
 
 // POST, recibiendo datos en el servidor
@@ -103,7 +132,24 @@ app.post('/api/notes', (request, response) => {
   })
 })
 
+// controlador de solicitudes con un Endpoint desconocido
 app.use(unknownEndpoint)
+
+// Middleware to customize Error Handling in this backend
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  // custom handling of error caused by ID object not valid for mongoDB
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  }
+
+  // any other error is passed to the predetermined Express error handler
+  next(error)
+}
+// This must be the last middleware loaded, and placed after the
+// route definitions in the file
+app.use(errorHandler)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {

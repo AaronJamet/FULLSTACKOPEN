@@ -23,16 +23,21 @@ morgan.token('body', req => {
 })
 app.use(morgan(':method :url :status :response-time :body'))
 
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint'})
+}
+
 // get complete list of persons stored in mongoDB
-app.get('/api/persons', (request, response) => {
+app.get('/api/persons', (request, response, next) => {
   Person
     .find({})
     .then(persons => {
       response.json(persons)
     })
+    .catch(error => next(error))
 })
 
-app.get('/info', (request, response) => {
+app.get('/info', (request, response, next) => {
   const date = new Date()
 
   Person
@@ -43,9 +48,10 @@ app.get('/info', (request, response) => {
         <p>${date}</p>`
       )
     })
+    .catch(error => next(error))
 })
 
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
   const id = request.params.id
 
   Person
@@ -53,18 +59,18 @@ app.get('/api/persons/:id', (request, response) => {
     .then(person => {
       response.json(person)
     })
+    .catch(error => next(error))  
 })
 
-app.delete('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  persons = persons.filter(person => person.id !== id)
-
-  response.status(204).end()
+app.delete('/api/persons/:id', (request, response, next) => {
+  Person.findByIdAndDelete(request.params.id)
+    .then(result => {
+      response.status(204).end()
+    })
+    .catch(error => next(error))
 })
 
-const generateRandomId = () => Math.round(Math.random() * 10000000)
-
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
   const body = request.body
 
   if (!body.name) {
@@ -93,7 +99,45 @@ app.post('/api/persons', (request, response) => {
   person.save().then(savedPerson => {
     response.json(savedPerson)
   })
+  .catch(error => next(error))
 })
+
+// PUT, update Note in mongoDB
+app.put('/api/persons/:id', (request, response, next) => {
+  const body = request.body
+
+  // findBYIdAndUpdate receives a normal JS object, not a new Person with constructor function
+  const person = {
+    name: body.name,
+    number: body.number,
+  }
+
+  // 'new: true' returns the object AFTER the update has been applied
+  Person.findByIdAndUpdate(request.params.id, person, { new: true })
+    .then(updatedPerson => {
+      response.json(updatedPerson)
+    })
+    .catch(error => next(error))
+})
+
+// controlador de solicitudes con un Endpoint desconocido
+app.use(unknownEndpoint)
+
+// Middleware to customize Error Handling in this backend
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  // custom handling of error caused by ID object not valid for mongoDB
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  }
+
+  // any other error is passed to the predetermined Express error handler
+  next(error)
+}
+// This must be the last middleware loaded, and placed after the
+// route definitions in the file
+app.use(errorHandler)
 
 const PORT = process.env.PORT
 app.listen(PORT)
