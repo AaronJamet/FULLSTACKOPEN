@@ -5,7 +5,6 @@ require('dotenv').config() // cargar archivo configuracion con variables de ento
 const express = require('express')
 const app = express()
 
-const mongoose = require('mongoose')
 const Note = require('./models/note')
 
 app.use(express.static('dist'))
@@ -14,10 +13,10 @@ app.use(express.static('dist'))
 // manejar objetos de REQUEST y RESPONSE
 // Esta función imprime info sobre cada solicitud que se envía al servidor
 const requestLogger = (request, response, next) => {
-  console.log('Method:', request.method);
-  console.log('Path:', request.path);
-  console.log('Body:', request.body);
-  console.log('---');
+  console.log('Method:', request.method)
+  console.log('Path:', request.path)
+  console.log('Body:', request.body)
+  console.log('---')
   next() // cede el control al siguiente Middleware
 }
 
@@ -42,27 +41,27 @@ app.get('/', (request, response) => {
 app.get('/api/notes', (request, response, next) => {
   // obtains all notes from the Atlas mongoDB
   Note.find({})
-      .then(notes => {
-        response.json(notes)
-      })
-      .catch(error => next(error))
+    .then(notes => {
+      response.json(notes)
+    })
+    .catch(error => next(error))
 })
 
 // GET individual resources or Notes
 app.get('/api/notes/:id', (request, response, next) => {
   Note.findById(request.params.id)
-      .then(note => {
-        if (note) {
-          response.json(note)
-        } else {
-          response.status(404).end()
-        } 
-      })
-      .catch(error => {
-        // pasar error hacia adelante con next(), como el throw en Java
-        // la ejecucion continuara en el middleware de Control de errores
-        next(error)
-      })
+    .then(note => {
+      if (note) {
+        response.json(note)
+      } else {
+        response.status(404).end()
+      } 
+    })
+    .catch(error => {
+      // pasar error hacia adelante con next(), como el throw en Java
+      // la ejecucion continuara en el middleware de Control de errores
+      next(error)
+    })
 })
 
 // ELIMINAR recursos
@@ -85,10 +84,11 @@ app.post('/api/notes', (request, response, next) => {
   })
 
   // save new note in mongoDB
-  note.save().then(savedNote => {
-    response.json(savedNote)
-  })
-  .catch(error => next(error))
+  note.save()
+    .then(savedNote => {
+      response.json(savedNote)
+    })
+    .catch(error => next(error))
 })
 
 // PUT, update Note in mongoDB

@@ -4,14 +4,13 @@ const morgan = require('morgan')
 require('dotenv').config() // cargar archivo configuracion con variables de entorno
 const app = express()
 
-const mongoose = require('mongoose')
 const Person = require('./models/person')
 
 // takes static files for deploying front from dist folder
 app.use(express.static('dist'))
 
-// Permite Intercambio de Recursos de Origen Cruzado (CORS) 
-// - asi codigo JavaScript puede comunicarse con servidores en 
+// Permite Intercambio de Recursos de Origen Cruzado (CORS)
+// - asi codigo JavaScript puede comunicarse con servidores en
 // 2 origenes: 3008 (backend Node) y 3000 (React Dev Server).
 const cors = require('cors')
 app.use(cors())
@@ -24,7 +23,7 @@ morgan.token('body', req => {
 app.use(morgan(':method :url :status :response-time :body'))
 
 const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: 'unknown endpoint'})
+  response.status(404).send({ error: 'unknown endpoint' })
 }
 
 // get complete list of persons stored in mongoDB
@@ -59,7 +58,7 @@ app.get('/api/persons/:id', (request, response, next) => {
     .then(person => {
       response.json(person)
     })
-    .catch(error => next(error))  
+    .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
@@ -78,10 +77,12 @@ app.post('/api/persons', (request, response, next) => {
     number: body.number
   })
 
-  person.save().then(savedPerson => {
-    response.json(savedPerson)
-  })
-  .catch(error => next(error))
+  person
+    .save()
+    .then(savedPerson => {
+      response.json(savedPerson)
+    })
+    .catch(error => next(error))
 })
 
 // PUT, update Note in mongoDB
@@ -91,8 +92,8 @@ app.put('/api/persons/:id', (request, response, next) => {
   // runValidators: true actives Validation for Updates, which are disabled by default
   // 'new: true' returns the object AFTER the update has been applied
   Person.findByIdAndUpdate(
-    request.params.id, 
-    { name, number }, 
+    request.params.id,
+    { name, number },
     { new: true, runValidators: true, context: 'query' }
   )
     .then(updatedPerson => {
@@ -125,4 +126,4 @@ app.use(errorHandler)
 
 const PORT = process.env.PORT
 app.listen(PORT)
-console.log(`Server is running in port ${PORT}`);
+console.log(`Server is running in port ${PORT}`)

@@ -20,7 +20,7 @@ if (process.argv.length > 5) {
 // MongoDB connection
 const password = process.argv[2]
 
-const url = 
+const url =
 `mongodb+srv://fullstack:${password}@fullstackopen.ml3uoya.mongodb.net/phonebookApp?retryWrites=true&w=majority&appName=fullstackopen`
 
 mongoose.set('strictQuery', false)
@@ -41,8 +41,8 @@ if (process.argv.length === 5) {
     number: process.argv[4]
   })
 
-  person.save().then(result =>{
-    console.log('person saved in DB');
+  person.save().then(result => {
+    console.log('person saved in DB')
     mongoose.connection.close()
   })
 }
@@ -51,13 +51,13 @@ if (process.argv.length === 5) {
 if (process.argv.length === 3) {
   Person
     .find({})
-    .then(result =>{
+    .then(result => {
       console.log('phonebook:')
       result.forEach(person => {
         console.log(person.name + ' ' + person.number)
-    })
+      })
 
-    mongoose.connection.close()
-  })
+      mongoose.connection.close()
+    })
 }
 
