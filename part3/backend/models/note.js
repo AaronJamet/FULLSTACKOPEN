@@ -15,8 +15,13 @@ mongoose.connect(url)
   })
 
 // mongoose Schema and Model for mongodb
+// Validation rules can be defined for each field in the Schema
 const noteSchema = new mongoose.Schema({
-  content: String,
+  content: {
+    type: String,
+    minLength: 5,
+    required: true
+  },
   important: Boolean,
 })
 

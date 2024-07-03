@@ -14,9 +14,23 @@ mongoose.connect(url)
   })
 
 // mongoose Schema and Model for phonebookApp mongoDB
+// Validation rules can be defined for each field in the Schema
 const personSchema = new mongoose.Schema({
-  name: String,
-  number: String
+  name: {
+    type: String,
+    minLength: 3,
+    required: [true, 'User name is required']
+  },
+  number: {
+    type: String,
+    validate: { // custom validator for phone format
+      validator: function(v) {
+        return /^\d{2,3}-\d{1,}$/.test(v)
+      },
+      message: props => `${props.value} is NOT a valid phone number format`
+    },
+    required: [true, 'User phone number is required']
+  }
 })
 
 // transform and toJSON functions, to customize the output of the mongoDb JSON objects

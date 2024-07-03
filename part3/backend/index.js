@@ -8,24 +8,6 @@ const app = express()
 const mongoose = require('mongoose')
 const Note = require('./models/note')
 
-/* let notes = [
-  {
-    id: 1,
-    content: 'HTML is easy',
-    important: true
-  },
-  {
-    id: 2,
-    content: 'Browser can execute only JavaScript',
-    important: false
-  },
-  {
-    id: 3,
-    content: 'GET and POST are the most important methods of HTTP protocol',
-    important: true
-  }
-] */
-
 app.use(express.static('dist'))
 
 // Ejemplo de MIDDLEWARE: funciones que pueden usarse para 
@@ -92,33 +74,9 @@ app.delete('/api/notes/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
-// PUT, update Note in mongoDB
-app.put('/api/notes/:id', (request, response, next) => {
-  const body = request.body
-
-  // findBYIdAndUpdate receives a normal JS object, not a new Note with constructor function
-  const note = {
-    content: body.content,
-    important: body.important,
-  }
-
-  // 'new: true' returns the object AFTER the update has been applied
-  Note.findByIdAndUpdate(request.params.id, note, { new: true })
-    .then(updatedNote => {
-      response.json(updatedNote)
-    })
-    .catch(error => next(error))
-})
-
 // POST, recibiendo datos en el servidor
-app.post('/api/notes', (request, response) => {
+app.post('/api/notes', (request, response, next) => {
   const body = request.body
-
-  if (body.content === undefined) {
-    return response.status(400).json({
-      error: 'content missing'
-    })
-  }
 
   // note objects are created with the constructor function of the Note mongoose Model
   const note = new Note({
@@ -130,6 +88,23 @@ app.post('/api/notes', (request, response) => {
   note.save().then(savedNote => {
     response.json(savedNote)
   })
+  .catch(error => next(error))
+})
+
+// PUT, update Note in mongoDB
+app.put('/api/notes/:id', (request, response, next) => {
+  const { content, important } = request.body
+
+  // runValidators: true actives Validation for Updates, which are disabled by default
+  // 'new: true' returns the object AFTER the update has been applied
+  Note.findByIdAndUpdate(
+    request.params.id, 
+    { content, important }, 
+    { new: true , runValidators: true, context: 'query'})
+      .then(updatedNote => {
+        response.json(updatedNote)
+      })
+      .catch(error => next(error))
 })
 
 // controlador de solicitudes con un Endpoint desconocido
@@ -140,13 +115,17 @@ const errorHandler = (error, request, response, next) => {
   console.error(error.message)
 
   // custom handling of error caused by ID object not valid for mongoDB
+  // and handling on Validation errors in the else clause
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message})
   }
 
   // any other error is passed to the predetermined Express error handler
   next(error)
 }
+
 // This must be the last middleware loaded, and placed after the
 // route definitions in the file
 app.use(errorHandler)

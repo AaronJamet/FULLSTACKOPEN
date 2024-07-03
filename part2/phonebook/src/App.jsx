@@ -44,6 +44,14 @@ const App = () => {
           .then(updatedPerson => {
             setPersons(persons.map(p => p.id !== person.id ? p : updatedPerson))
           })
+          .catch(error => {
+            // show custom validation error message to the user
+            setIsErrorMessage(true)  
+            setMessage(error.response.data.error)
+            setTimeout(() => {
+              setMessage(null)
+            }, 5000)
+          })
         
           setIsErrorMessage(false)
           setMessage(`${person.name} phonenumber has been updated`)
@@ -54,10 +62,18 @@ const App = () => {
     } else {
       personService
         .create(nameObject)
-        .then(returnedPerson => {
-          setPersons(persons.concat(returnedPerson))
+        .then(createdPerson => {
+          setPersons(persons.concat(createdPerson))
           setNewName('')
           setNewNumber('')
+        })
+        .catch(error => {
+          // show custom validation error message to the user
+          setIsErrorMessage(true)  
+          setMessage(error.response.data.error)
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
         })
 
       setIsErrorMessage(false)  
