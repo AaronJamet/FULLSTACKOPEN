@@ -1,0 +1,35 @@
+const mongoose = require('mongoose')
+
+const blogSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    minLength: 4,
+    required: true
+  },
+  author: {
+    type: String,
+    minLength: 5,
+    required: true
+  },
+  url: {
+    type: String,
+    minLength: 10,
+    required: true
+  },
+  likes: {
+    type: String,
+    required: true
+  },
+})
+
+// transform and toJSON functions, to customize the output of the mongoDb JSON objects
+blogSchema.set('toJSON', {
+  transform: (document, returnedObject) => {
+    // delete _id and _v fields from output, and show id as a String
+    returnedObject.id = returnedObject._id.toString()
+    delete returnedObject._id
+    delete returnedObject.__v
+  }
+})
+
+module.exports = mongoose.model('Blog', blogSchema)
