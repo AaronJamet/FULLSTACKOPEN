@@ -6,7 +6,6 @@ import Message from './components/Message'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import personService from './services/personsService'
-import axios from 'axios'
 import { useEffect } from 'react'
 
 const App = () => {
@@ -91,7 +90,7 @@ const App = () => {
       .then( 
         setPersons(persons.filter(p => p.id !== id))
       )
-      .catch(error => {
+      .catch(() => {
         setIsErrorMessage(true)
         setMessage(
           `the person '${name}' was already deleted from the server`
