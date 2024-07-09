@@ -19,12 +19,28 @@ const unknownEndpoint = (request, response) => {
 const errorHandler = (error, request, response, next) => {
   logger.error(error.message)
 
-  // custom handling of error caused by ID object not valid for mongoDB
-  // and handling on Validation errors in the else clause
+  // custom handling of diffrenet kind of errors that app can throw
   if (error.name === 'CastError') {
-    return response.status(400).send({ error: 'malformatted id' })
+    return response.status(400).send({
+      error: 'malformatted id'
+    })
   } else if (error.name === 'ValidationError') {
-    return response.status(400).json({ error: error.message })
+    return response.status(400).json({
+      error: error.message
+    })
+  } else if (error.name === 'MongoServerError'
+            && error.message.includes('E11000 duplicate key error')) {
+    return response.status(400).json({
+      error: 'expected `username` to be unique'
+    })
+  } else if (error.name === 'JsonWebTokenError') {
+    return response.status(401).json({
+      error: 'token invalid'
+    })
+  } else if (error.name === 'TokenExpiredError') {
+    return response.status(401).json({
+      error: 'token expired'
+    })
   }
 
   // any other error is passed to the predetermined Express error handler

@@ -10,6 +10,10 @@ const noteSchema = new mongoose.Schema({
     required: true
   },
   important: Boolean,
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }
 })
 
 // transform and toJSON functions, to customize the output of the mongoDb JSON objects

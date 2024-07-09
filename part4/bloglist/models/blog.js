@@ -20,6 +20,10 @@ const blogSchema = new mongoose.Schema({
     type: String,
     default: 0
   },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }
 })
 
 // transform and toJSON functions, to customize the output of the mongoDb JSON objects

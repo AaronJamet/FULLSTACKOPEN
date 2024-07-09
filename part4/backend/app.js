@@ -4,6 +4,8 @@ const app = express()
 const config = require('./utils/config')
 const logger = require('./utils/logger')
 const notesRouter = require('./controllers/notes')
+const usersRouter = require('./controllers/users')
+const loginRouter = require('./controllers/login')
 const middleware = require('./utils/middleware')
 const mongoose = require('mongoose')
 
@@ -13,10 +15,10 @@ logger.info('connecting to', config.MONGODB_URI)
 
 mongoose.connect(config.MONGODB_URI)
   .then(() => {
-    console.log('connected to phonebookApp mongoDB')
+    console.log('connected to noteApp mongoDB')
   })
   .catch(error => {
-    console.log('error connecting to phonebookApp mongoDB:', error.message)
+    console.log('error connecting to noteApp mongoDB:', error.message)
   })
 
 // using front app stored in the dist folder
@@ -33,6 +35,8 @@ app.use(middleware.requestLogger)
 
 // ENDPOINTS and server actions
 app.use('/api/notes', notesRouter) // base url defined when calling Router
+app.use('/api/users', usersRouter) // users endpoints
+app.use('/api/login', loginRouter) // login and authentication endpoints
 
 // controlador de solicitudes con un Endpoint desconocido
 app.use(middleware.unknownEndpoint)
