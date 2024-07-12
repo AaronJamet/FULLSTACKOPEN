@@ -14,7 +14,6 @@ const blogSchema = new mongoose.Schema({
   url: {
     type: String,
     minLength: 10,
-    required: true
   },
   likes: {
     type: String,

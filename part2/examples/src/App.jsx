@@ -60,6 +60,8 @@ const App = ( props ) => {
     setNewNote(event.target.value)
   }
 
+  console.log(notes);
+
   const notesToShow = showAll
     ? notes
     : notes.filter(note => note.important)
