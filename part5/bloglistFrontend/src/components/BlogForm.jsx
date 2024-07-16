@@ -1,5 +1,7 @@
-import { useState } from "react"
-const BlogForm = ({createBlog, setIsErrorMessage, setMessage }) => {
+import { useState } from 'react'
+import PropTypes from 'prop-types'
+
+const BlogForm = ({ createBlog }) => {
   const [blogName, setBlogName] = useState('')
   const [blogAuthor, setBlogAuthor] = useState('')
 
@@ -11,7 +13,7 @@ const BlogForm = ({createBlog, setIsErrorMessage, setMessage }) => {
     })
 
     setBlogName('')
-    setBlogAuthor('')  
+    setBlogAuthor('')
   }
 
   return (
@@ -21,20 +23,20 @@ const BlogForm = ({createBlog, setIsErrorMessage, setMessage }) => {
       <form onSubmit={addBlog}>
         <div>
           blog name:
-            <input type="text" 
-                    value={blogName}
-                    name="Blogname"
-                    onChange={({ target }) => setBlogName(target.value)} 
-            />
+          <input type="text"
+            value={blogName}
+            name="Blogname"
+            onChange={({ target }) => setBlogName(target.value)}
+          />
         </div>
 
         <div>
           blog author:
-            <input type="text" 
-                    value={blogAuthor}
-                    name="Blogauthor"
-                    onChange={({ target }) => setBlogAuthor(target.value)} 
-            />
+          <input type="text"
+            value={blogAuthor}
+            name="Blogauthor"
+            onChange={({ target }) => setBlogAuthor(target.value)}
+          />
         </div>
 
         <button type='submit'>Add Blog</button>
@@ -42,4 +44,9 @@ const BlogForm = ({createBlog, setIsErrorMessage, setMessage }) => {
     </div>
   )
 }
+
+BlogForm.propTypes = {
+  createBlog: PropTypes.func.isRequired
+}
+
 export default BlogForm

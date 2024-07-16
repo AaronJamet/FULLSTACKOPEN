@@ -28,7 +28,7 @@ const update = async (id, newObject) => {
 
   const request = axios.put(`${baseUrl}/${id}`, newObject, config)
   return request.then(response => response.data)
-} 
+}
 
 const deleteBlog = async (id, deletedBlog) => {
   const config = {
@@ -37,9 +37,9 @@ const deleteBlog = async (id, deletedBlog) => {
 
   const request = axios.delete(`${baseUrl}/${id}`, config)
   return request.then(response => response.data)
-} 
+}
 
-export default { 
-  getAll, setToken, 
+export default {
+  getAll, setToken,
   create, update, deleteBlog
 }
