@@ -41,7 +41,7 @@ test('blogs returned are the number expected and in JSON format', async () => {
     .expect(200)
     .expect('Content-Type', /application\/json/)
 
-  assert.strictEqual(response.body.length, helper.initialBlogs.length)  
+  assert.strictEqual(response.body.length, helper.initialBlogs.length)
 })
 
 test('verify that blogs have a primary key field called id', async () => {
@@ -57,7 +57,7 @@ test('a new valid blog can be added', async () => {
     .post('/api/login')
     .send(newUser)
 
-  const rootUser = await User.findOne({ username: newUser.username })  
+  const rootUser = await User.findOne({ username: newUser.username })
 
   const newBlog = {
     title: 'Ferdinando Buscema',
@@ -86,8 +86,8 @@ test('if key likes lacks in post body, value assigned will be 0 by default', asy
     .post('/api/login')
     .send(newUser)
 
-  const rootUser = await User.findOne({ username: newUser.username })   
-  
+  const rootUser = await User.findOne({ username: newUser.username })
+
   const newBlogWithoutLikes = {
     title: 'Ferdinando Buscema',
     author: 'Ferdinando Buscema',
@@ -104,7 +104,7 @@ test('if key likes lacks in post body, value assigned will be 0 by default', asy
 
   const blogsAtEnd = await helper.blogsInDb()
   // const titles = blogsAtEnd.map(b => b.title)
-  
+
   const newBlogPosted = blogsAtEnd.find(b => b.title.includes('Ferdinando Buscema'))
   assert.strictEqual(newBlogPosted.likes, '0')
 })
@@ -114,8 +114,8 @@ test('if new blog body doesnt have title or url, backend responds with 400 Bad R
     .post('/api/login')
     .send(newUser)
 
-  const rootUser = await User.findOne({ username: newUser.username }) 
-  
+  const rootUser = await User.findOne({ username: newUser.username })
+
   const newBlogWithoutTitle = {
     author: 'Ferdinando Buscema',
     url: 'http://www.ferdinandobuscema.blogspot/',
@@ -175,7 +175,7 @@ test('an existing blog is updated and its new value its replaced in the database
     .expect('Content-Type', /application\/json/)
 
   const blogsAtEnd = await helper.blogsInDb()
-  
+
   const blogUpdated = blogsAtEnd.find(b => b.id === blogToUpdate.id)
   assert.strictEqual(blogToUpdate.likes.toString(), blogUpdated.likes)
 })

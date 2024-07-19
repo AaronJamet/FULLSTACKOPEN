@@ -23,7 +23,7 @@ test('clicking the button calls event handler once', async () => {
     important: true
   }
 
-  const mockHandler = vi.fn() // controladore de eventos mockeado
+  const mockHandler = vi.fn() // controlador de eventos mockeado
 
   render(
     <Note note={note} toggleImportance={mockHandler} />

@@ -26,7 +26,7 @@ const App = () => {
         setNotes(initialNotes)
       })
   }, [])
-  
+
   // checks if user is already logged when the pages loads, and gets user info in that case
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
@@ -39,7 +39,7 @@ const App = () => {
 
   const toggleImportanceOf = (id) => {
     const note = notes.find(n => n.id === id)
-    const changedNote = { ...note, important: !note.important}
+    const changedNote = { ...note, important: !note.important }
 
     noteService
       .update(id, changedNote)
@@ -73,7 +73,7 @@ const App = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    
+
     try {
       const user = await loginService.login({
         username, password
@@ -103,7 +103,7 @@ const App = () => {
     return (
       <div>
         <Togglable buttonLabel='Login' >
-          <LoginForm 
+          <LoginForm
             username={username}
             password={password}
             handleUsernameChange={({ target }) => setUsername(target.value)}
@@ -120,17 +120,17 @@ const App = () => {
       <h1>Notes App</h1>
       <Notification message={errorMessage} />
 
-      {user === null 
+      {user === null
         ? loginForm()
         : <div>
-            <p>{user.name} logged-in</p>
-            
-            <Togglable buttonLabel='new note' ref={noteFormRef} >
-              <NoteForm
-                createNote={addNote}
-              />  
-            </Togglable> 
-          </div>
+          <p>{user.name} logged-in</p>
+
+          <Togglable buttonLabel='new note' ref={noteFormRef} >
+            <NoteForm
+              createNote={addNote}
+            />
+          </Togglable>
+        </div>
       }
 
       <div>
@@ -140,10 +140,10 @@ const App = () => {
       </div>
 
       <ul>
-        {notesToShow.map((note, i) => 
-          <Note 
+        {notesToShow.map((note, i) =>
+          <Note
             key={i}
-            note={note} 
+            note={note}
             toggleImportance={() => toggleImportanceOf(note.id)}
           />
         )}
