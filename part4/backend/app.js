@@ -38,6 +38,12 @@ app.use('/api/notes', notesRouter) // base url defined when calling Router
 app.use('/api/users', usersRouter) // users endpoints
 app.use('/api/login', loginRouter) // login and authentication endpoints
 
+// Testing endpoint, only if app is started in Test mode
+if (process.env.NODE_ENV === 'test') {
+  const testingRouter = require('./controllers/testing')
+  app.use('/api/testing', testingRouter)
+}
+
 // controlador de solicitudes con un Endpoint desconocido
 app.use(middleware.unknownEndpoint)
 
