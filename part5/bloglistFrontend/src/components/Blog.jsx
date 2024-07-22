@@ -13,7 +13,7 @@ const Blog = ({ blog, user, updateLikes, deleteBlog }) => {
   }
 
   const hideWhenVisible = { display: showDetails ? '' : 'none' }
-  const buttonLabel =  showDetails ? 'View details' : 'Hide details'
+  const buttonLabel =  showDetails ? 'Hide details' : 'View details'
 
   const toggleVisibility = () => {
     setShowDetails(!showDetails)
@@ -29,7 +29,7 @@ const Blog = ({ blog, user, updateLikes, deleteBlog }) => {
 
         <div style={hideWhenVisible} id='detailsText'>
           <p> {blog.url} </p>
-          <p> likes: {blog.likes} &nbsp;
+          <p title="likes"> likes: {blog.likes} &nbsp;
             <button type="submit" id="likesButton" onClick={updateLikes}>Like</button>
           </p>
           {blog.user

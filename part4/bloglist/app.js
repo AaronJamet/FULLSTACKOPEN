@@ -33,6 +33,12 @@ app.use('/api/blogs', blogsRouter) // base url defined when calling Router
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
 
+// Testing endpoint, only if app is started in Test mode
+if (process.env.NODE_ENV === 'test') {
+  const testingRouter = require('./controllers/testing')
+  app.use('/api/testing', testingRouter)
+}
+
 app.use(middleware.unknownEndpoint)
 
 // This must be the last middleware loaded, and placed after the

@@ -63,7 +63,7 @@ describe('Note app', () => {
 
         await otherNoteElement.getByRole('button', { name: 'make not important' })
           .click()
-          await expect(otherNoteElement.getByText('make important')).toBeVisible()
+        await expect(otherNoteElement.getByText('make important')).toBeVisible()
       })
     })
   })
