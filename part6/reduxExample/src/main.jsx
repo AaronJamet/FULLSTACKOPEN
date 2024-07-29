@@ -4,8 +4,9 @@ import { configureStore } from '@reduxjs/toolkit'
 import { Provider } from 'react-redux'
 
 import App from './App'
-import noteReducer from './reducers/noteReducer'
+import noteReducer, { setNotes } from './reducers/noteReducer'
 import filterReducer from './reducers/filterReducer'
+import noteService from './services/notes'
 
 // Reducers manage the state from an app, the actual state and 
 // action type as given as parameters to the function.
