@@ -27,19 +27,21 @@ const notificationSlice = createSlice({
     clearNotification() {
       return ''
     },
-    voteNotification(state, action) {
-      const message = `you voted '${action.payload.content}'`
-
-      return message
-    },
-    createNotification(state, action) {
-      const message = `New note created: '${action.payload}'`
-      
-      return message
+    showNotification(state, action) {
+      return action.payload
     }
   }
 })
 
+export const setNotification = (message, duration) => {
+  return (dispatch) => {
+    dispatch(clearNotification())
+    dispatch(showNotification(message))
+    setTimeout(() => {
+      dispatch(clearNotification())
+    }, duration * 1000) // convert from seconds to milliseconds
+  }
+}
 
-export const { clearNotification, voteNotification, createNotification } = notificationSlice.actions  
+export const { clearNotification, showNotification } = notificationSlice.actions  
 export default notificationSlice.reducer

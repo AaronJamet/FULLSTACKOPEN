@@ -1,7 +1,6 @@
 import { useDispatch } from 'react-redux'
 import { createAnecdote } from '../reducers/anecdoteReducer'
-import { handleCreateNotification } from '../reducers/notificationReducer'
-import anecdotesService from '../services/anecdotes'
+import { setNotification } from '../reducers/notificationReducer'
 
 const AnecdoteForm = () => {
   const dispatch = useDispatch()
@@ -11,9 +10,8 @@ const AnecdoteForm = () => {
     const content = event.target.anecdote.value
     event.target.anecdote.value = ''
 
-    const newAnecdote = await anecdotesService.createNew(content) // save in json-server backend DB
-    dispatch(createAnecdote(newAnecdote)) // calls to Action Creator to modify state
-    dispatch(handleCreateNotification(content))
+    dispatch(createAnecdote(content)) // calls to Action Creator to modify state
+    dispatch(setNotification(`New note created: ${content}`, 6))
   }
 
   return (
