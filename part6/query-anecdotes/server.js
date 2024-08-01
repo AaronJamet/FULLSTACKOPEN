@@ -1,4 +1,5 @@
 import jsonServer from 'json-server'
+import useNotify from './src/useNotify'
 
 const server = jsonServer.create()
 const router = jsonServer.router('db.json')

@@ -1,13 +1,20 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { createAnecdote } from "../../requests"
+import { useMessageDispatch } from '../MessageContext'
+import useNotify from "../useNotify"
 
 const AnecdoteForm = () => {
+  const dispatch = useMessageDispatch()
   const queryClient = useQueryClient()
+  const notify = useNotify()
 
   const newAnecdoteMutation = useMutation({ 
     mutationFn: createAnecdote,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['anecdotes'] })
+    },
+    onError: () => {
+      notify('too short anecdote, must have 5 length or more', 5000)
     }
   })
 
@@ -17,6 +24,9 @@ const AnecdoteForm = () => {
     event.target.anecdote.value = ''
     
     newAnecdoteMutation.mutate({ content, votes: 0 })
+
+    // show notification through a dispatch to the Context state
+    notify(`New note created: ${content}`, 5000)
 }
 
   return (
