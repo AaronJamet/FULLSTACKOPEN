@@ -1,5 +1,16 @@
 const mongoose = require('mongoose')
 
+const commentSchema = new mongoose.Schema({
+  content: {
+    type: String,
+    required: true
+  },
+  date: {
+    type: Date,
+    required: Date.now
+  }
+})
+
 const blogSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -22,7 +33,8 @@ const blogSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
-  }
+  },
+  comments: [commentSchema]
 })
 
 // transform and toJSON functions, to customize the output of the mongoDb JSON objects

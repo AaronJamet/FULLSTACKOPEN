@@ -19,7 +19,7 @@ usersRouter.post('/', async (request, response, next) => {
 
   const user = new User({
     username,
-    name, 
+    name,
     passwordHash
   })
 
@@ -29,7 +29,7 @@ usersRouter.post('/', async (request, response, next) => {
   } catch(error) {
     next(error)
   }
-  
+
 })
 
 module.exports = usersRouter

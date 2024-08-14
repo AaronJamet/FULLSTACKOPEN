@@ -1,9 +1,8 @@
-const jwt = require('jsonwebtoken')
 const blogsRouter = require('express').Router()
 const middleware = require('../utils/middleware')
 const Blog = require('../models/blog')
 
-blogsRouter.get('/', async (request, response, next) => {
+blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog
     // using populate to replace the id referenced with the object of note documents,
     // selecting which fields to take as the second argument
@@ -12,7 +11,20 @@ blogsRouter.get('/', async (request, response, next) => {
   response.json(blogs)
 })
 
-blogsRouter.post('/', middleware.userExtractor, async (request, response, next) => {
+blogsRouter.get('/:id', async (request, response) => {
+  const blog = await Blog
+    // using populate to replace the id referenced with the object of note documents,
+    // selecting which fields to take as the second argument
+    .findById(request.params.id).populate('user', { username: 1, name: 1 })
+
+  if (blog) {
+    response.json(blog)
+  } else {
+    response.status(404).json({ error: 'Blog not found' })
+  }
+})
+
+blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
   const body = request.body
   const user = request.user
 
@@ -29,6 +41,41 @@ blogsRouter.post('/', middleware.userExtractor, async (request, response, next) 
   await user.save()
 
   response.status(201).json(savedBlog)
+})
+
+blogsRouter.get('/:id/comments', async (request, response) => {
+  try {
+    const blog = await Blog.findById(request.params.id)
+
+    if (!blog) {
+      response.status(404).json({ error: 'Blog not found' })
+    }
+
+    response.json(blog.comments)
+  } catch (e) {
+    response.status(500).json({ error: 'Something went wrong in server...' })
+  }
+})
+
+blogsRouter.post('/:id/comments', async (request, response) => {
+  const { content } = request.body
+  if (!content) {
+    response.status(400).json({ error: 'Comment content missing' })
+  }
+
+  const blog = await Blog.findById(request.params.id)
+  if (!blog) {
+    response.status(400).json({ error: 'Blog not found' })
+  }
+
+  const comment = {
+    content,
+    date: new Date()
+  }
+
+  blog.comments = blog.comments.concat(comment)
+
+  response.status(201).json(comment)
 })
 
 blogsRouter.delete('/:id', middleware.userExtractor, async (request, response) => {
