@@ -1,0 +1,17 @@
+{
+  "name": "books-graphql",
+  "version": "0.0.1",
+  "description": "First backend exercise for Part 8 of fullstack course",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Aaron Jamet",
+  "license": "ISC",
+  "dependencies": {
+    "@apollo/server": "^4.11.0",
+    "apollo-server": "^3.13.0",
+    "graphql": "^16.9.0",
+    "uuid": "^10.0.0"
+  }
+}
