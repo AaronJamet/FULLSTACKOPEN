@@ -67,7 +67,7 @@ const Authors = (props) => {
         </tbody>
       </table>
 
-      <h2>Set birhtyear</h2>
+      <h2>Set birthyear</h2>
       <form onSubmit={submit}>
         <div>
           <Select 
@@ -98,7 +98,7 @@ const Authors = (props) => {
 }
 
 Authors.propTypes = {
-  show: PropTypes.bool.isRequired
+  show: PropTypes.bool
 }
 
 export default Authors

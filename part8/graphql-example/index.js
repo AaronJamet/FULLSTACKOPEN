@@ -245,7 +245,7 @@ startStandaloneServer(server, {
 
       const currentUser = await User
         .findById(decodedToken.id).populate('friends')
-      return currentUser
+      return { currentUser }
     }
   }
 }).then(({ url }) => {

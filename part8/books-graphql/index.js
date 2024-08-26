@@ -208,7 +208,7 @@ const resolvers = {
       }
 
       if (args.genre) {
-        query.genre = { $in: [args.genre] }
+        query.genres = { $in: [args.genre] }
       }
 
       return await Book.find(query).populate('author')
@@ -412,8 +412,10 @@ startStandaloneServer(server, {
 
       const currentUser = await User
         .findById(decodedToken.id)
-      return currentUser
+      return { currentUser }
     }
+
+    return { currentUser: null }
   }
 }).then(({ url }) => {
   console.log(`Server ready at ${url}`)
