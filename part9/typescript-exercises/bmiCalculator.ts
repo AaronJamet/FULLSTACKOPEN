@@ -1,20 +1,14 @@
+import express from 'express';
+import qs from 'qs';
+const app = express();
+
+// configure query parser to obtain parameters from url
+app.use('query parser', (str: string) => qs.parse(str, { depth: 2 }));
+
 interface BmiValues {
-  value1: number;
-  value2: number;
-}
-
-const parseArguments = (args: string[]): BmiValues => {
-  if (args.length < 4) throw new Error('Not enough arguments');
-  if (args.length > 4) throw new Error('Too much arguments');
-
-  if (!isNaN(Number(args[2])) && !isNaN(Number(args[3]))) {
-    return {
-      value1: Number(args[2]),
-      value2: Number(args[3])
-    }
-  } else {
-    throw new Error('Provided values were not numbers!');
-  }
+  height: number;
+  weight: number;
+  bmi: string;
 }
 
 const calculateBmi = (height: number, weight: number): string => {
@@ -33,15 +27,42 @@ const calculateBmi = (height: number, weight: number): string => {
   } catch (error) {
     throw new Error("Bmi calculation has failed!");
   }
+
+  return "";
 }
 
-try {
-  const { value1, value2 } = parseArguments(process.argv);
-  console.log(calculateBmi(value1, value2));
-} catch (error: unknown) {
-  let errorMessage = 'Something bad happened.';
-  if (error instanceof Error) {
-    errorMessage += ' Error: ' + error.message;
+app.get('/bmi', (req, res) => {
+  const height = Number(req.query.height);
+  const weight = Number(req.query.weight);
+
+  try {
+    if (isNaN(height) || isNaN(weight)) {
+      res.status(400).send('Height and weight must be numbers');
+    } else if (height && weight) {
+      const bmi = calculateBmi(height, weight);
+
+      const response: BmiValues = {
+        weight: weight,
+        height: height,
+        bmi: bmi
+      };
+
+      res.json(response);
+    } else {
+      res.status(400).send('Height and weight must be passed as query parameters');
+    }
+  } catch (error: unknown) {
+    let errorMessage = 'Something bad happened.';
+    if (error instanceof Error) {
+      errorMessage += ' Error: ' + error.message;
+    }
+    console.log(errorMessage);
+    res.status(500).send(errorMessage);
   }
-  console.log(errorMessage);
-}
+});
+
+const PORT = 3002;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+})

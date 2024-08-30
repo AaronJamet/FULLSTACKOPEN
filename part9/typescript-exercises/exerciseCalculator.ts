@@ -3,7 +3,7 @@ interface ExerciseValues {
   trainingDays: number;
   success: boolean;
   rating: number;
-  ratingDescription: String;
+  ratingDescription: string;
   target: number;
   average: number;
 }
@@ -28,7 +28,7 @@ const calculateExerciseGoals = (args: string[]): ExerciseValues => {
 
     let success = false;
     let rating = 0;
-    let ratingDescription;
+    let ratingDescription = '';
 
     if ((averageHours+0.5) < targetHours) {
       success = false;
