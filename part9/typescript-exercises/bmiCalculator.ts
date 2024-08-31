@@ -24,12 +24,13 @@ const calculateBmi = (height: number, weight: number): string => {
     if (bmi > 30.00 && bmi < 35.00) return 'Obese (Class I)';
     if (bmi > 35.00 && bmi < 40.00) return 'Obese (Class II)';
     if (bmi > 40.00) return 'Obese (Class III)';
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     throw new Error("Bmi calculation has failed!");
   }
 
   return "";
-}
+};
 
 app.get('/bmi', (req, res) => {
   const height = Number(req.query.height);
@@ -65,4 +66,4 @@ const PORT = 3002;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-})
+});

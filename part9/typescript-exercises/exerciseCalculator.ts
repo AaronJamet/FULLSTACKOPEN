@@ -8,15 +8,15 @@ interface ExerciseValues {
   average: number;
 }
 
-const calculateExerciseGoals = (args: string[]): ExerciseValues => {
-  if (args.length < 4) throw new Error('Not enough arguments');
-  if (args.length > 4) throw new Error('Too much arguments');
+export const calculateExerciseGoals = (dailyHours: number[], target: number): ExerciseValues => {
+  /* if (args.length < 4) throw new Error('Not enough arguments');
+  if (args.length > 4) throw new Error('Too much arguments'); */
 
-  const inputArray = JSON.parse(args[2]);
-  const hoursArray = inputArray.map(Number);
-  const targetHours = Number(args[3]);
+  const hoursArray = dailyHours;
+  //const hoursArray = inputArray.map(Number);
+  const targetHours = target;
 
-  if (isNaN(Number(args[3]))) {
+  if (isNaN(Number(target))) {
     throw new Error('Second argument passed is not a single number');
   }
   else if (hoursArray.length !== 7) {
@@ -59,11 +59,11 @@ const calculateExerciseGoals = (args: string[]): ExerciseValues => {
       success: success,
       rating: rating,
       ratingDescription: ratingDescription
-    }
+    };
   }  
-}
+};
 
-try {
+/* try {
   const result = calculateExerciseGoals(process.argv);
   console.log(result);
 } catch (error: unknown) {
@@ -72,4 +72,4 @@ try {
     errorMessage += ' Error: ' + error.message;
   }
   console.log(errorMessage);
-}
+} */
