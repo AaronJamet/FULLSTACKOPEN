@@ -1,4 +1,4 @@
-import { NewPatientEntry, Gender } from "./types";
+import { NewPatientEntry, Gender, Entry } from "./types";
 
 // Assure that a properly TYPED NewDiaryEntry from the request body
 const toNewPatientEntry = (object: unknown): NewPatientEntry => {
@@ -10,13 +10,14 @@ const toNewPatientEntry = (object: unknown): NewPatientEntry => {
   // type guard using IN operator, to check that object has all
   // the required fields
   if ('name' in object && 'dateOfBirth' in object && 'ssn' in object
-    && 'gender' in object && 'occupation' in object) {
+    && 'gender' in object && 'occupation' in object && 'entries' in object) {
       const newEntry: NewPatientEntry = {
         name: parseName(object.name),
         dateOfBirth: parseDateOfBirth(object.dateOfBirth),
         ssn: parseSsn(object.ssn),
         gender: parseGender(object.gender),
-        occupation: parseOccupation(object.occupation)
+        occupation: parseOccupation(object.occupation),
+        entries: parseEntries(object.entries)
       };
 
       return newEntry;
@@ -76,6 +77,19 @@ const parseOccupation = (occupation: unknown): string => {
   }
 
   return occupation;
+};
+
+const isArray = (param: unknown): param is Entry[] => {
+  return Array.isArray(param) 
+    && param.every(item => typeof item === 'object' && item !== null);
+};
+
+const parseEntries = (entries: unknown): Entry[] => {
+  if (!isArray(entries)) {
+    throw new Error('Incorrect or missing entries: ' + JSON.stringify(entries));
+  }
+
+  return entries;
 };
 
 export default toNewPatientEntry;

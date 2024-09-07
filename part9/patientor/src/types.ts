@@ -10,13 +10,18 @@ export interface DiagnoseObject {
   latin?: string
 }
 
+export interface Entry {
+
+}
+
 export interface PatientObject {
   id: string,
   name: string,
   dateOfBirth: string,
   ssn: string,
   gender: Gender,
-  occupation: string
+  occupation: string,
+  entries: Entry[]
 }
 
 // types can be modified with Pick or Omit
