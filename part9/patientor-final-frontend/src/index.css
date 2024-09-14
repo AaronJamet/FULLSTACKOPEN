@@ -67,3 +67,29 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.new-entry-form {
+  border: 1px solid #ccc;
+  padding: 20px;
+  margin: 20px 0;
+  background-color: #f9f9f9;
+}
+
+.new-entry-form form {
+  display: flex;
+  flex-direction: column;
+}
+
+.new-entry-form div {
+  margin-bottom: 10px;
+}
+
+.new-entry-form label {
+  font-weight: bold;
+}
+
+.new-entry-form input {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
