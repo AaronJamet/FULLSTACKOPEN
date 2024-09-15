@@ -11,13 +11,16 @@
     "lint": "eslint ./src/**/*.{js,jsx} App.js --no-error-on-unmatched-pattern"
   },
   "dependencies": {
+    "@expo/metro-runtime": "~3.2.3",
     "expo": "^51.0.0",
+    "expo-constants": "^16.0.2",
     "expo-status-bar": "~1.12.1",
     "metro": "~0.80.8",
     "metro-config": "^0.80.12",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.74.5",
+    "react-native-debugger": "^1.1.0",
     "react-native-web": "~0.19.10"
   },
   "devDependencies": {
