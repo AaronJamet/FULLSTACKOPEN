@@ -27,7 +27,8 @@
     "react-native-web": "~0.19.10",
     "react-router-native": "^6.26.2",
     "stream-browserify": "^3.0.0",
-    "vm-browserify": "^1.1.2"
+    "vm-browserify": "^1.1.2",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.24.0",

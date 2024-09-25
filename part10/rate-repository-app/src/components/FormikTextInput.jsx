@@ -5,7 +5,26 @@ const { default: TextCustom } = require("./TextCustom");
 
 const styles = StyleSheet.create({
   errorText: {
-    marginTop: 5
+    marginBottom: 5,
+    marginLeft: 20,
+    color: '#d73a4a'
+  },
+  textbox: {
+    padding: 20,
+    marginVertical: 12,
+    marginHorizontal: 15,
+    borderWidth: 1,
+    borderRadius: 5,
+    borderColor: '#9e9e9e'
+  },
+  errorTextbox: {
+    color: '#bdbdbd',
+    padding: 20,
+    marginVertical: 12,
+    marginHorizontal: 15,
+    borderWidth: 1,
+    borderRadius: 5,
+    borderColor: '#d73a4a'
   }
 });
 
@@ -20,8 +39,11 @@ const FormixTextInput = ({ name, ...props }) => {
         onBlur={() => helpers.setTouched(true)}
         value={field.value}
         error={showError}
+        placeholderTextColor='#bdbdbd'
+        style={[styles.textbox, showError && styles.errorTextbox]} 
         {...props}
       />
+
       {showError && <TextCustom style={styles.errorText}>{meta.error}</TextCustom>}
     </>
   );
