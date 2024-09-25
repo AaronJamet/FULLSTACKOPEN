@@ -25,47 +25,17 @@ const AppBar = () => {
   return (
     <View style={styles.container} >
       <ScrollView horizontal>
-      <Pressable style={styles.pressable}>
-        <Link to="/" >
-          <Text style={styles.text}>Repositories</Text>
-        </Link>
-      </Pressable>
-      <Pressable style={styles.pressable}>    
-        <Link to="/login" >
-          <Text style={styles.text}>Sign In</Text>
-        </Link>
-      </Pressable>
-
-      <Pressable style={styles.pressable}>
-        <Link to="/" >
-          <Text style={styles.text}>Repositories</Text>
-        </Link>
-      </Pressable>
-      <Pressable style={styles.pressable}>    
-        <Link to="/login" >
-          <Text style={styles.text}>Sign In</Text>
-        </Link>
-      </Pressable>
-      <Pressable style={styles.pressable}>
-        <Link to="/" >
-          <Text style={styles.text}>Repositories</Text>
-        </Link>
-      </Pressable>
-      <Pressable style={styles.pressable}>    
-        <Link to="/login" >
-          <Text style={styles.text}>Sign In</Text>
-        </Link>
-      </Pressable>
-      <Pressable style={styles.pressable}>
-        <Link to="/" >
-          <Text style={styles.text}>Repositories</Text>
-        </Link>
-      </Pressable>
-      <Pressable style={styles.pressable}>    
-        <Link to="/login" >
-          <Text style={styles.text}>Sign In</Text>
-        </Link>
-      </Pressable>
+        <Pressable style={styles.pressable}>
+          <Link to="/" >
+            <Text style={styles.text}>Repositories</Text>
+          </Link>
+        </Pressable>
+        
+        <Pressable style={styles.pressable}>    
+          <Link to="/login" >
+            <Text style={styles.text}>Sign In</Text>
+          </Link>
+        </Pressable>
       </ScrollView>
     </View>
   )
