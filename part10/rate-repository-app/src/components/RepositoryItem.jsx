@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   secondRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 30
+    paddingHorizontal: 20
   },
   stat: {
     alignItems: 'center'
@@ -63,7 +63,7 @@ const RepositoryItem = ({ listItem }) => (
         source={{ uri: listItem.ownerAvatarUrl }} 
       />
       <View style={styles.textContainer}>
-        <Text style={styles.fullName}>{listItem.fullName}</Text>
+        <Text style={styles.fullName}>{listItem.name}</Text>
         <Text style={styles.description}>{listItem.description}</Text>
         <Text style={styles.language}>{listItem.language}</Text>
       </View>
